@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能手环用户注册</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #409eff;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #dcdfe6;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        input:focus {
+            border-color: #409eff;
+            outline: none;
+        }
+        .btn {
+            background-color: #409eff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background-color: #66b1ff;
+        }
+        .row {
+            display: flex;
+            gap: 15px;
+        }
+        .col {
+            flex: 1;
+        }
+        .section-title {
+            margin-top: 30px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ebeef5;
+            color: #409eff;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            display: none;
+        }
+        .success {
+            background-color: #f0f9eb;
+            color: #67c23a;
+            display: block;
+        }
+        .error {
+            background-color: #fef0f0;
+            color: #f56c6c;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>智能手环用户注册</h1>
+        
+        <form id="userForm">
+            <!-- 基本信息 -->
+            <h2 class="section-title">基本信息</h2>
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="nickname">昵称</label>
+                <input type="text" id="nickname" name="nickname" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="age">年龄</label>
+                <input type="number" id="age" name="age" min="1" max="120" value="30" required>
+            </div>
+            
+            <!-- 健康数据 -->
+            <h2 class="section-title">健康数据</h2>
+            <div class="form-group">
+                <label for="heartRate">心率</label>
+                <input type="number" id="heartRate" name="heartRate" min="40" max="200" value="75" required>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="systolic">收缩压</label>
+                        <input type="number" id="systolic" name="systolic" min="80" max="200" value="120" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="diastolic">舒张压</label>
+                        <input type="number" id="diastolic" name="diastolic" min="40" max="120" value="80" required>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="steps">步数</label>
+                <input type="number" id="steps" name="steps" min="0" max="50000" value="5000" required>
+            </div>
+            
+            <!-- 位置信息 -->
+            <h2 class="section-title">位置信息</h2>
+            <div class="form-group">
+                <label for="area">所在区域</label>
+                <input type="text" id="area" name="area" value="北京市" required>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="lat">纬度</label>
+                        <input type="number" id="lat" name="lat" step="0.000001" value="39.916527" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="lng">经度</label>
+                        <input type="number" id="lng" name="lng" step="0.000001" value="116.397128" required>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn">注册用户</button>
+        </form>
+        
+        <div id="result" class="result"></div>
+    </div>
+    
+    <script>
+        document.getElementById('userForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                username: document.getElementById('username').value,
+                nickname: document.getElementById('nickname').value,
+                age: parseInt(document.getElementById('age').value),
+                deviceId: `SB${Math.floor(Math.random() * 9000) + 1000}`,
+                registerTime: new Date().toISOString().split('T')[0],
+                heartRate: parseInt(document.getElementById('heartRate').value),
+                bloodPressure: {
+                    systolic: parseInt(document.getElementById('systolic').value),
+                    diastolic: parseInt(document.getElementById('diastolic').value)
+                },
+                steps: parseInt(document.getElementById('steps').value),
+                location: {
+                    lat: parseFloat(document.getElementById('lat').value),
+                    lng: parseFloat(document.getElementById('lng').value),
+                    area: document.getElementById('area').value
+                }
+            };
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = 'result';
+            resultDiv.style.display = 'none';
+            
+            try {
+                const response = await fetch('http://182.92.87.209:5000/api/users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.textContent = `注册成功！用户 ${formData.username} 已创建。`;
+                    resultDiv.className = 'result success';
+                    document.getElementById('userForm').reset();
+                } else {
+                    resultDiv.textContent = `注册失败: ${data.message}`;
+                    resultDiv.className = 'result error';
+                }
+            } catch (error) {
+                resultDiv.textContent = `注册失败: ${error.message || '未知错误'}`;
+                resultDiv.className = 'result error';
+            }
+            
+            resultDiv.style.display = 'block';
+        });
+    </script>
+</body>
+</html> 

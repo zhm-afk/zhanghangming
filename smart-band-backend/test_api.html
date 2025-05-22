@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API测试</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #409eff;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border: 1px solid #dcdfe6;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #409eff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #66b1ff;
+        }
+        pre {
+            background-color: #f5f7fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow: auto;
+            max-height: 300px;
+        }
+        .success {
+            color: #67c23a;
+        }
+        .error {
+            color: #f56c6c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>API测试工具</h1>
+        
+        <div class="section">
+            <h2>获取所有用户</h2>
+            <button id="getAllUsers">获取用户列表</button>
+            <pre id="getAllUsersResult"></pre>
+        </div>
+        
+        <div class="section">
+            <h2>添加新用户</h2>
+            <button id="addUser">添加测试用户</button>
+            <pre id="addUserResult"></pre>
+        </div>
+        
+        <div class="section">
+            <h2>获取单个用户</h2>
+            <input type="number" id="userId" placeholder="输入用户ID" style="padding: 8px; width: 100px;">
+            <button id="getUser">获取用户</button>
+            <pre id="getUserResult"></pre>
+        </div>
+        
+        <div class="section">
+            <h2>请求详情</h2>
+            <pre id="requestDetails"></pre>
+        </div>
+    </div>
+    
+    <script>
+        // API基础URL
+        const API_BASE_URL = 'http://182.92.87.209:5000/api';
+        
+        // 记录请求详情
+        function logRequest(method, url, requestData, responseData, error) {
+            const details = document.getElementById('requestDetails');
+            const now = new Date().toLocaleTimeString();
+            
+            let log = `[${now}] ${method} ${url}\n`;
+            
+            if (requestData) {
+                log += `请求数据: ${JSON.stringify(requestData, null, 2)}\n`;
+            }
+            
+            if (responseData) {
+                log += `响应: ${JSON.stringify(responseData, null, 2)}\n`;
+            }
+            
+            if (error) {
+                log += `错误: ${error}\n`;
+            }
+            
+            log += '----------------------------------------\n\n';
+            
+            details.textContent = log + details.textContent;
+        }
+        
+        // 获取所有用户
+        document.getElementById('getAllUsers').addEventListener('click', async function() {
+            const resultElement = document.getElementById('getAllUsersResult');
+            resultElement.textContent = '加载中...';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/users`);
+                const data = await response.json();
+                
+                resultElement.textContent = JSON.stringify(data, null, 2);
+                resultElement.className = 'success';
+                
+                logRequest('GET', `${API_BASE_URL}/users`, null, data);
+            } catch (error) {
+                resultElement.textContent = `获取用户列表失败: ${error.message}`;
+                resultElement.className = 'error';
+                
+                logRequest('GET', `${API_BASE_URL}/users`, null, null, error.message);
+            }
+        });
+        
+        // 添加测试用户
+        document.getElementById('addUser').addEventListener('click', async function() {
+            const resultElement = document.getElementById('addUserResult');
+            resultElement.textContent = '添加中...';
+            
+            // 创建随机测试用户数据
+            const randomId = Math.floor(Math.random() * 1000);
+            const userData = {
+                username: `测试用户${randomId}`,
+                nickname: `测试用户${randomId}`,
+                age: 25 + Math.floor(Math.random() * 20),
+                deviceId: `SB${9000 + randomId}`,
+                registerTime: new Date().toISOString().split('T')[0],
+                heartRate: 60 + Math.floor(Math.random() * 40),
+                bloodPressure: {
+                    systolic: 110 + Math.floor(Math.random() * 30),
+                    diastolic: 70 + Math.floor(Math.random() * 20)
+                },
+                steps: Math.floor(Math.random() * 10000),
+                location: {
+                    lat: 39.9 + Math.random() * 0.1,
+                    lng: 116.3 + Math.random() * 0.2,
+                    area: ['海淀区', '朝阳区', '西城区', '东城区', '丰台区'][Math.floor(Math.random() * 5)]
+                }
+            };
+            
+            try {
+                // 使用 fetch API 发送请求
+                const response = await fetch(`${API_BASE_URL}/users`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userData)
+                });
+                
+                // 获取响应内容
+                const responseText = await response.text();
+                let data;
+                
+                try {
+                    // 尝试解析JSON
+                    data = JSON.parse(responseText);
+                } catch (e) {
+                    // 如果不是JSON，直接使用文本
+                    data = { responseText };
+                }
+                
+                // 显示结果
+                if (response.ok) {
+                    resultElement.textContent = JSON.stringify(data, null, 2);
+                    resultElement.className = 'success';
+                } else {
+                    resultElement.textContent = `错误: ${response.status} ${response.statusText}\n${JSON.stringify(data, null, 2)}`;
+                    resultElement.className = 'error';
+                }
+                
+                // 记录请求
+                logRequest('POST', `${API_BASE_URL}/users`, userData, data, response.ok ? null : `${response.status} ${response.statusText}`);
+            } catch (error) {
+                resultElement.textContent = `添加用户失败: ${error.message}`;
+                resultElement.className = 'error';
+                
+                logRequest('POST', `${API_BASE_URL}/users`, userData, null, error.message);
+                
+                console.error('完整错误:', error);
+            }
+        });
+        
+        // 获取单个用户
+        document.getElementById('getUser').addEventListener('click', async function() {
+            const userId = document.getElementById('userId').value;
+            const resultElement = document.getElementById('getUserResult');
+            
+            if (!userId) {
+                resultElement.textContent = '请输入用户ID';
+                resultElement.className = 'error';
+                return;
+            }
+            
+            resultElement.textContent = '加载中...';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/users/${userId}`);
+                const data = await response.json();
+                
+                resultElement.textContent = JSON.stringify(data, null, 2);
+                resultElement.className = 'success';
+                
+                logRequest('GET', `${API_BASE_URL}/users/${userId}`, null, data);
+            } catch (error) {
+                resultElement.textContent = `获取用户失败: ${error.message}`;
+                resultElement.className = 'error';
+                
+                logRequest('GET', `${API_BASE_URL}/users/${userId}`, null, null, error.message);
+            }
+        });
+    </script>
+</body>
+</html> 

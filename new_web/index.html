@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link rel="icon" href="/智能手环.png" type="image/png" />
+    <title>智能手环后台管理</title>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        overflow-x: hidden;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        -webkit-tap-highlight-color: transparent;
+      }
+      #app {
+        height: 100%;
+        width: 100%;
+      }
+      /* 针对不同设备的基础字体大小 */
+      @media screen and (max-width: 768px) {
+        html {
+          font-size: 14px;
+        }
+      }
+      @media screen and (min-width: 769px) and (max-width: 1200px) {
+        html {
+          font-size: 15px;
+        }
+      }
+      @media screen and (min-width: 1201px) {
+        html {
+          font-size: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html> 

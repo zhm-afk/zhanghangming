@@ -1,0 +1,214 @@
+/* 全局样式和CSS变量 */
+:root {
+  /* 主题颜色 */
+  --el-color-primary: #1a237e;
+  
+  /* 菜单样式变量 */
+  --menu-bg-color: #1a237e;
+  --menu-hover-color: #3949ab;
+  --menu-active-bg-color: #3f51b5;
+  --menu-text-color: #ffffff;
+  --menu-active-text-color: #ffffff;
+  
+  /* 过渡动画 */
+  --menu-transition-duration: 0.3s;
+  
+  /* 字体大小变量 */
+  --global-font-size: 14px;
+  --global-font-size-small: 12px;
+  --global-font-size-large: 16px;
+  
+  /* 响应式布局断点 */
+  --breakpoint-xs: 576px;
+  --breakpoint-sm: 768px;
+  --breakpoint-md: 992px;
+  --breakpoint-lg: 1200px;
+}
+
+/* 全局字体设置 */
+body {
+  font-size: var(--global-font-size);
+  transition: font-size 0.3s ease;
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* 为所有元素添加字体大小过渡 */
+* {
+  transition: font-size 0.3s ease;
+  box-sizing: border-box;
+}
+
+/* 应用字体大小变量到常用元素 */
+.el-button {
+  font-size: var(--global-font-size);
+}
+
+.el-input__inner, 
+.el-textarea__inner {
+  font-size: var(--global-font-size);
+}
+
+.el-form-item__label {
+  font-size: var(--global-font-size);
+}
+
+.el-menu-item, 
+.el-submenu__title {
+  font-size: var(--global-font-size);
+}
+
+.el-table {
+  font-size: var(--global-font-size);
+}
+
+.el-dropdown-menu__item {
+  font-size: var(--global-font-size);
+}
+
+/* 小号字体 */
+.el-tag, 
+.el-badge__content, 
+.el-form-item__error {
+  font-size: var(--global-font-size-small);
+}
+
+/* 大号字体 */
+h1, h2, h3, .el-dialog__title {
+  font-size: var(--global-font-size-large);
+}
+
+/* 全局过渡效果 */
+.el-menu, 
+.el-menu-item, 
+.el-sub-menu, 
+.el-sub-menu__title,
+.aside-menu {
+  transition: all var(--menu-transition-duration) !important;
+}
+
+/* 深色模式 */
+body.dark-mode {
+  background-color: #121212;
+  color: #f5f5f5;
+}
+
+/* 确保所有元素使用统一的过渡动画 */
+[class*="el-menu"] {
+  transition-property: background-color, color, border-color !important;
+  transition-duration: var(--menu-transition-duration) !important;
+  transition-timing-function: ease !important;
+}
+
+/* 响应式布局样式 */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 响应式容器 */
+.container {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* 响应式布局媒体查询 */
+/* 小于768px的设备（手机） */
+@media (max-width: 767px) {
+  :root {
+    --global-font-size: 13px;
+    --global-font-size-small: 11px;
+    --global-font-size-large: 15px;
+  }
+  
+  /* 调整Element Plus列布局 */
+  .el-col-24 {
+    width: 100% !important;
+  }
+  
+  .el-col-12 {
+    width: 100% !important;
+  }
+  
+  .el-col-8, .el-col-6 {
+    width: 100% !important;
+    margin-bottom: 15px;
+  }
+
+  /* 表格响应式处理 */
+  .el-table {
+    width: 100%;
+    display: block;
+    overflow-x: auto;
+  }
+  
+  /* 调整表单样式 */
+  .el-form-item {
+    margin-bottom: 15px;
+  }
+  
+  .el-form-item__label {
+    float: none;
+    display: block;
+    text-align: left;
+    padding: 0 0 8px;
+  }
+  
+  /* 菜单调整为移动端友好 */
+  .el-menu--collapse {
+    width: 64px !important;
+  }
+  
+  /* 调整弹窗大小 */
+  .el-dialog {
+    width: 95% !important;
+    margin: 10px auto !important;
+  }
+  
+  /* 标题字体大小调整 */
+  h1 {
+    font-size: 1.8rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  h3 {
+    font-size: 1.2rem;
+  }
+}
+
+/* 平板设备 (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+  .el-col-8 {
+    width: 50% !important;
+  }
+  
+  .el-col-6 {
+    width: 50% !important;
+    margin-bottom: 15px;
+  }
+  
+  /* 平板上的其他样式调整 */
+  .el-dialog {
+    width: 90% !important;
+  }
+}
+
+/* 大于992px的响应式调整（桌面） */
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+} 
